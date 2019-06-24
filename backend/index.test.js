@@ -5,6 +5,19 @@ test("checkFile to be defined", () => {
 });
 
 test("checkFile should return apple", async () => {
-  const result = await checkFile();
+  const visionClient = {
+    labelDetection: () => {
+      return [
+        {
+          labelAnnotations: [
+            {
+              description: "Apple"
+            }
+          ]
+        }
+      ];
+    }
+  };
+  const result = await checkFile(visionClient);
   expect(result.find(i => i.description === "Apple").description).toBe("Apple");
 });

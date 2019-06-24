@@ -1,8 +1,5 @@
-const vision = require("@google-cloud/vision");
-
-exports.checkFile = async () => {
+exports.checkFile = async client => {
   async function quickstart() {
-    const client = new vision.ImageAnnotatorClient();
     const [result] = await client.labelDetection("./apple.jpg");
     const labels = result.labelAnnotations;
     return result.labelAnnotations.map(({ description, score }) => ({
@@ -12,3 +9,11 @@ exports.checkFile = async () => {
   }
   return await quickstart();
 };
+
+if (require.main === module) {
+  const { createVisionClient } = require("./visionClient.js");
+  const client = createVisionClient();
+  exports.checkFile(client).then(data => {
+    console.log(data);
+  });
+}
