@@ -6,7 +6,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "jest": "^24.8.0"
+    "jest": "^24.8.0",
+    "node-fetch": "^2.6.0"
   },
   "jest": {
     "testEnvironment": "node"
