@@ -1,0 +1,14 @@
+{
+  "name": "backend",
+  "main": "index.js",
+  "scripts": {
+    "watch": "jest --watch",
+    "test": "jest"
+  },
+  "dependencies": {
+    "jest": "^24.8.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
