@@ -7,4 +7,6 @@ const server = http.createServer((req, res) => {
 exports.server = server;
 
 if (require.main === module)
-  server.listen(process.env.PORt, () => console.log("Listening"));
+  server.listen(process.env.PORT || 9000, () =>
+    console.log("Listening on localhost:" + server.address().port)
+  );
