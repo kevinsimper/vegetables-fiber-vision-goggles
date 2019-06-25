@@ -1,6 +1,6 @@
-exports.checkFile = async client => {
+exports.checkFile = async (client, file) => {
   async function quickstart() {
-    const [result] = await client.labelDetection("./apple.jpg");
+    const [result] = await client.labelDetection(file);
     const labels = result.labelAnnotations;
     return result.labelAnnotations.map(({ description, score }) => ({
       description,
@@ -11,9 +11,10 @@ exports.checkFile = async client => {
 };
 
 if (require.main === module) {
+  const { readFileSync } = require("fs");
   const { createVisionClient } = require("./visionClient.js");
   const client = createVisionClient();
-  exports.checkFile(client).then(data => {
+  exports.checkFile(client, readFileSync("./apple.jpg")).then(data => {
     console.log(data);
   });
 }

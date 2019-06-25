@@ -1,3 +1,4 @@
+const { readFileSync } = require("fs");
 const { checkFile } = require("./index.js");
 
 test("checkFile to be defined", () => {
@@ -18,6 +19,6 @@ test("checkFile should return apple", async () => {
       ];
     }
   };
-  const result = await checkFile(visionClient);
+  const result = await checkFile(visionClient, readFileSync("./apple.jpg"));
   expect(result.find(i => i.description === "Apple").description).toBe("Apple");
 });
