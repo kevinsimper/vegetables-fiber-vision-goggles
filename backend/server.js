@@ -10,7 +10,7 @@ async function checkfile(req, res) {
   res.end(JSON.stringify(result));
 }
 
-function checkfilejson(req, res) {
+exports.checkfilejson = function checkfilejson(visionClient, req, res) {
   let payload = "";
   req.on("data", data => {
     payload += data.toString();
@@ -18,20 +18,19 @@ function checkfilejson(req, res) {
   req.on("end", async () => {
     const data = JSON.parse(payload);
     const image = Buffer.from(data.file.data);
-    const visionClient = createVisionClient();
     const result = await checkFile(visionClient, image);
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify(result));
-    res.end("hello");
   });
-}
+};
 
 const server = http.createServer(async (req, res) => {
   console.log("New request", req.url);
   if (req.url === "/checkfile") {
     checkfile(req, res);
   } else if (req.url === "/checkfilejson") {
-    checkfilejson(req, res);
+    const visionClient = createVisionClient();
+    checkfilejson(visionClient, req, res);
   } else {
     res.end("vegetables-goggles");
   }
