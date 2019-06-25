@@ -10,7 +10,8 @@ async function checkfile(req, res) {
   res.end(JSON.stringify(result));
 }
 
-exports.checkfilejson = function checkfilejson(visionClient, req, res) {
+exports.checkfilejson = checkfilejson
+function checkfilejson(visionClient, req, res) {
   let payload = "";
   req.on("data", data => {
     payload += data.toString();
