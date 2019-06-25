@@ -26,7 +26,13 @@ function checkfilejson(visionClient, req, res) {
 };
 
 const server = http.createServer(async (req, res) => {
-  console.log("New request", req.url);
+  console.log("New request", req.method, req.url);
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Headers', 'content-type');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  if(req.method === 'OPTIONS') {
+    return res.end()
+  }
   if (req.url === "/checkfile") {
     checkfile(req, res);
   } else if (req.url === "/checkfilejson") {
