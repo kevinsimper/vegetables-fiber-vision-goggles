@@ -20,13 +20,36 @@ async function post(result) {
   return data
 }
 
+function readMyBlob(blob) {
+  const reader = new FileReader();
+  reader.onload = function () {
+    const result = event.target.result
+    post(result)
+  }
+  reader.readAsArrayBuffer(blob)
+}
+
+function drawCanvas(img) {
+  let ctx = mycanvas.getContext("2d");
+  mycanvas.width = 500
+  mycanvas.height = 500
+  ctx.drawImage(img, 0, 0, 500, 500);
+  const resized = mycanvas.toBlob((blob) => {
+    readMyBlob(blob)
+  }, "image/png")
+}
+
 function analyze() {
   const reader = new FileReader();
   reader.onload = function(event) {
     const result = event.target.result;
-    post(result)
+    let img = document.createElement("img");
+    img.onload = function () {
+      drawCanvas(img)
+    }
+    img.src = result
   };
-  reader.readAsArrayBuffer(image.files[0]);
+  reader.readAsDataURL(image.files[0]);
 
 }
 window.analyze = analyze;

@@ -1,11 +1,16 @@
 exports.checkFile = async (client, file) => {
   async function quickstart() {
-    const [result] = await client.labelDetection(file);
-    const labels = result.labelAnnotations;
-    return result.labelAnnotations.map(({ description, score }) => ({
-      description,
-      score
-    }));
+    try {
+      const all = await client.labelDetection(file);
+      console.log(all[0].error);
+      const labels = all[0].labelAnnotations;
+      return all[0].labelAnnotations.map(({ description, score }) => ({
+        description,
+        score
+      }));
+    } catch (e) {
+      console.log(e);
+    }
   }
   return await quickstart();
 };
