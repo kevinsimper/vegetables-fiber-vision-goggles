@@ -3,27 +3,35 @@ const { readFileSync } = require("fs");
 const { checkFile } = require("./index.js");
 const { createVisionClient } = require("./visionClient.js");
 
+async function checkfile(req, res) {
+  const visionClient = createVisionClient();
+  const result = await checkFile(visionClient, readFileSync("./apple.jpg"));
+  res.setHeader("Content-Type", "application/json");
+  res.end(JSON.stringify(result));
+}
+
+function checkfilejson(req, res) {
+  let payload = "";
+  req.on("data", data => {
+    payload += data.toString();
+  });
+  req.on("end", async () => {
+    const data = JSON.parse(payload);
+    const image = Buffer.from(data.file.data);
+    const visionClient = createVisionClient();
+    const result = await checkFile(visionClient, image);
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify(result));
+    res.end("hello");
+  });
+}
+
 const server = http.createServer(async (req, res) => {
   console.log("New request", req.url);
   if (req.url === "/checkfile") {
-    const visionClient = createVisionClient();
-    const result = await checkFile(visionClient, readFileSync("./apple.jpg"));
-    res.setHeader("Content-Type", "application/json");
-    res.end(JSON.stringify(result));
+    checkfile(req, res);
   } else if (req.url === "/checkfilejson") {
-    let payload = "";
-    req.on("data", data => {
-      payload += data.toString();
-    });
-    req.on("end", async () => {
-      const data = JSON.parse(payload);
-      const image = Buffer.from(data.file.data);
-      const visionClient = createVisionClient();
-      const result = await checkFile(visionClient, image);
-      res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify(result));
-      res.end("hello");
-    });
+    checkfilejson(req, res);
   } else {
     res.end("vegetables-goggles");
   }
